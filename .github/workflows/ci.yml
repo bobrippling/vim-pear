@@ -12,4 +12,4 @@ jobs:
     - name: dependencies
       run: git clone https://github.com/junegunn/vader.vim.git
     - name: test
-      run: vim -Nu <(printf 'set rtp+=%s\n' 'vader.vim' '.') -c 'Vader! test/*' >/dev/null
+      run: ./check.sh
