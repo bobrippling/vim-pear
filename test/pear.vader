@@ -1,0 +1,165 @@
+# -----------------------
+
+Given (parens and stepover):
+  void f
+
+Do (open paren):
+  A(
+Expect (closed paren):
+  void f()
+
+Do (stepover):
+  A()|
+Expect:
+  void f()|
+
+# -----------------------
+
+Given (stepover existing):
+  void f)
+
+Do:
+  $i)|
+Expect:
+  void f)|
+
+# -----------------------
+
+Given (newline ready text):
+  void f(){}
+
+Execute:
+  setlocal expandtab tabstop=2
+
+Do:
+  $i\<Enter>|
+Expect:
+  void f(){
+    |
+  }
+
+# -----------------------
+
+Given (don't parenthesize/quote):
+  needs_surrounding)
+  I
+
+Do:
+  I(
+Expect:
+  (needs_surrounding)
+  I
+
+Do:
+  jA'm
+Expect:
+  needs_surrounding)
+  I'm
+
+# -----------------------
+
+Given:
+  line a
+  line b
+  line c()
+
+Do (delete pair):
+  A(\<BS>\<Esc>jj$i\<BS>
+Expect:
+  line a
+  line b
+  line c
+
+Do (redo):
+  A(\<Esc>j.
+Expect:
+  line a()
+  line b()
+  line c()
+
+Do (backslash):
+  A\(
+Expect:
+  line a\(
+  line b
+  line c()
+
+# -----------------------
+
+Given:
+  so they say
+
+Do (quote):
+  I"
+Expect:
+  "so they say
+
+Do (start string):
+  o"hi|
+Expect:
+  so they say
+  "hi|"
+
+Do (stepover quote):
+  o"hi"|
+Expect:
+  so they say
+  "hi"|
+
+# -----------------------
+
+Given:
+  def f():
+
+Execute:
+  setlocal expandtab tabstop=2
+
+Do (triple quote):
+  o"""
+Expect:
+  def f():
+    """"""
+
+Do (triple quote with contents):
+  o"""hi|
+Expect:
+  def f():
+    """hi|"""
+
+Do (triple quote with contents and stepover):
+  o"""hi"""|
+Expect (stepover currently doesn't work for multi-char closes):
+  def f():
+    """hi"|""
+
+# -----------------------
+
+Given rust:
+  fn f() {
+    a::
+  }
+
+Do:
+  jA<hi
+Expect:
+  fn f() {
+    a::<hi>
+  }
+
+Do:
+  jAx < y
+Expect:
+  fn f() {
+    a::x < y
+  }
+
+# -----------------------
+
+#Before:
+#  function! s:assert_at(line, col)
+#    let [off, curswant] = [0, 1]
+#    let expected = [str2nr(a:line), str2nr(a:col), off, curswant]
+#    " echom expected getcurpos()[1:]
+#    Assert getcurpos()[1:] ==# expected
+#  endfunction
+#  command! -nargs=+ AssertCursorAt call s:assert_at(<f-args>)

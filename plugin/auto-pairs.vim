@@ -3,7 +3,7 @@
 " Version: 1.0.0
 " License: MIT
 
-let s:less_than_checked = { 'pair': '>', 'before': '(^|\w)$' }
+let s:less_than_checked = { 'pair': '>', 'before': '(^|\S)$' }
 let s:space_or_eol = '^(\s|$)'
 
 let s:pairs = {
@@ -21,7 +21,7 @@ let s:pairs = {
 
 let s:pairs_per_ft = {
 \  'vim': {
-\    '"': { 'pair': '"', 'before': '\S' },
+\    '"': { 'pair': '"', 'after': s:space_or_eol, 'before': '\S' },
 \  },
 \  'rust': {
 \    "'": { 'pair': "'", 'before': '(^|[^&])$' },
@@ -116,6 +116,18 @@ function! s:insert_open_or_stepover(key, ent)
 	let line = getline('.')
 	let before = strpart(line, 0, pos)
 
+	" if the open and close are the same, check stepover before
+	" trying to insert the close (or not and keeping the open quote)
+	let close = ent.pair
+	if a:key ==# close
+		" e.g. closing quotes, etc
+		let after = strpart(line, pos, s:ulen(a:key))
+
+		if after ==# close
+			return s:right
+		endif
+	endif
+
 	let re_before = get(ent, 'before', '')
 	if !empty(re_before) && match(before, '\v' .. re_before) ==# -1
 		"echom "didn't match /" .. re_before .. "/ against '" .. before .. "'"
@@ -128,18 +140,6 @@ function! s:insert_open_or_stepover(key, ent)
 		if match(after, '\v' .. re_after) ==# -1
 			"echom "didn't match /" .. re_after .. "/ against '" .. after .. "'"
 			return a:key
-		endif
-	endif
-
-	let close = ent.pair
-	if a:key ==# close
-		" e.g. closing quotes, etc
-		let pos = col('.') - 1
-		let line = getline('.')
-		let after = strpart(line, pos, s:ulen(a:key))
-
-		if after ==# close
-			return s:right
 		endif
 	endif
 
