@@ -4,18 +4,19 @@
 " License: MIT
 
 let s:less_than_checked = { 'pair': '>', 'before': '(^|\w)$' }
+let s:space_or_eol = '^(\s|$)'
 
 let s:pairs = {
-\  '(': { 'pair': ')', 'after': '^([^)[:alnum:]]|$)' },
-\  '[': { 'pair': ']', 'after': '^([^][:alnum:]]|$)' },
-\  '{': { 'pair': '}', 'after': '^([^}[:alnum:]]|$)' },
+\  '(': { 'pair': ')', 'after': s:space_or_eol },
+\  '[': { 'pair': ']', 'after': s:space_or_eol },
+\  '{': { 'pair': '}', 'after': s:space_or_eol },
 \  '<': s:less_than_checked,
-\  "'": { 'pair': "'", 'before': '[^[:alpha:]]$' },
-\  '"': '"',
-\  '```': '```',
-\  '"""': '"""',
-\  "'''": "'''",
-\  "`": "`"
+\  "'": { 'pair': "'", 'after': s:space_or_eol, 'before': '[^[:alpha:]]$' },
+\  '"': { 'pair': '"', 'after': s:space_or_eol },
+\  '```': { 'pair': '```', 'after': s:space_or_eol },
+\  '"""': { 'pair': '"""', 'after': s:space_or_eol },
+\  "'''": { 'pair': "'''", 'after': s:space_or_eol },
+\  "`": { 'pair': "`", 'after': s:space_or_eol }
 \}
 
 let s:pairs_per_ft = {
@@ -111,32 +112,26 @@ endfunction
 function! s:insert_open_or_stepover(key, ent)
 	let ent = a:ent
 
-	if type(ent) ==# v:t_string
-		let close = ent
-		"echom "map to " .. close
-	else
-		let close = ent.pair
+	let pos = col('.') - 1
+	let line = getline('.')
+	let before = strpart(line, 0, pos)
 
-		let pos = col('.') - 1
-		let line = getline('.')
-		let before = strpart(line, 0, pos)
+	let re_before = get(ent, 'before', '')
+	if !empty(re_before) && match(before, '\v' .. re_before) ==# -1
+		"echom "didn't match /" .. re_before .. "/ against '" .. before .. "'"
+		return a:key
+	endif
 
-		let re_before = get(ent, 'before', '')
-		if !empty(re_before) && match(before, '\v' .. re_before) ==# -1
-			"echom "didn't match /" .. re_before .. "/ against '" .. before .. "'"
+	let re_after = get(ent, 'after', '')
+	if !empty(re_after)
+		let after = strpart(line, pos)
+		if match(after, '\v' .. re_after) ==# -1
+			"echom "didn't match /" .. re_after .. "/ against '" .. after .. "'"
 			return a:key
-		endif
-
-		let re_after = get(ent, 'after', '')
-		if !empty(re_after)
-			let after = strpart(line, pos)
-			if match(after, '\v' .. re_after) ==# -1
-				"echom "didn't match /" .. re_after .. "/ against '" .. after .. "'"
-				return a:key
-			endif
 		endif
 	endif
 
+	let close = ent.pair
 	if a:key ==# close
 		" e.g. closing quotes, etc
 		let pos = col('.') - 1
@@ -149,13 +144,6 @@ function! s:insert_open_or_stepover(key, ent)
 	endif
 
 	return a:key .. close .. s:lefts(close)
-endfunction
-
-function! s:closeparen(ent)
-	if type(a:ent) ==# v:t_string
-		return a:ent
-	endif
-	return a:ent.pair
 endfunction
 
 function! s:surrounded()
@@ -172,7 +160,7 @@ function! s:surrounded()
 	endif
 
 	let after = line[pos]
-	let expected = s:closeparen(ent)
+	let expected = ent.pair
 	if after !=# expected
 		return 0
 	endif
@@ -214,7 +202,7 @@ function! s:imap_pair(key, buffer)
 	call s:imap(a:key, 'PearInsert', a:buffer)
 
 	let ent = s:getpair(a:key)
-	let close = s:closeparen(ent)
+	let close = ent.pair
 
 	if a:key !=# close
 		call s:imap(close, 'PearStepover', a:buffer)
