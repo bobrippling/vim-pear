@@ -1,3 +1,6 @@
+Before:
+  command! SetIndent setlocal autoindent cindent expandtab tabstop=8
+
 # -----------------------
 
 Given (parens and stepover):
@@ -29,13 +32,13 @@ Given (newline ready text):
   void f(){}
 
 Execute:
-  setlocal expandtab tabstop=2
+  SetIndent
 
 Do:
   $i\<Enter>|
 Expect:
   void f(){
-    |
+          |
   }
 
 # -----------------------
@@ -191,25 +194,24 @@ Given (triple quoting):
   def f():
 
 Execute:
-  setlocal expandtab tabstop=2
-
+  SetIndent
 Do (triple quote):
   o"""
 Expect:
   def f():
-    """"""
+          """"""
 
 Do (triple quote with contents):
   o"""hi|
 Expect:
   def f():
-    """hi|"""
+          """hi|"""
 
 Do (triple quote with contents and stepover):
   o"""hi"""|
 Expect (stepover currently doesn't work for multi-char closes):
   def f():
-    """hi"|""
+          """hi"|""
 
 # -----------------------
 
