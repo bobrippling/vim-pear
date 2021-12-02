@@ -64,7 +64,9 @@ Given:
   line c()
 
 Do (delete pair):
-  A(\<BS>\<Esc>jj$i\<BS>
+  A(\<BS>
+  \<Esc>
+  jj$i\<BS>
 Expect:
   line a
   line b
