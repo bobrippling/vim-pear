@@ -31,17 +31,17 @@ let s:pairs_per_ft = {
 
 function! PearInsert(key)
 	if !s:enabled()
-    return a:key
-  end
+		return a:key
+	end
 
 	let pos = col('.') - 1
 	let line = getline('.')
 	let before = strpart(line, 0, pos)
 
-  " Ignore auto close if prev character is \
-  if before[-1:-1] ==# '\'
-    return a:key
-  end
+	" Ignore auto close if prev character is \
+	if before[-1:-1] ==# '\'
+		return a:key
+	end
 
 	let ent = s:getpair(a:key)
 	if type(ent) != v:t_number
@@ -53,8 +53,8 @@ endfunction
 
 function! PearStepover(key)
 	if !s:enabled()
-    return a:key
-  end
+		return a:key
+	end
 
 	let pos = col('.') - 1
 	let line = getline('.')
@@ -64,9 +64,9 @@ function! PearStepover(key)
 endfunction
 
 function! PearDelete()
-  if !s:enabled()
-    return "\<BS>"
-  end
+	if !s:enabled()
+		return "\<BS>"
+	end
 
 	if !s:surrounded()
 		return "\<BS>"
@@ -76,8 +76,8 @@ endfunction
 
 function! PearReturn()
 	if !s:enabled()
-    return ''
-  end
+		return ''
+	end
 
 	if !s:surrounded()
 		return "\<CR>"
@@ -211,17 +211,17 @@ function! s:imap_pair(key, buffer)
 endfunction
 
 function! s:imap(key, func, buffer)
-  " | is special key which separate map command from text
-  let key = a:key
-  if key ==# '|'
-    let key = '<BAR>'
-  end
-  let escaped_key = substitute(key, "'", "''", 'g')
+	" | is special key which separate map command from text
+	let key = a:key
+	if key ==# '|'
+		let key = '<BAR>'
+	end
+	let escaped_key = substitute(key, "'", "''", 'g')
 
 	let args = a:buffer ? '<buffer> ' : ''
 
-  " use expr will cause search() to not work
-  execute 'inoremap <silent> ' .. args .. key .. " <C-R>=" .. a:func .. "('" .. escaped_key .. "')<CR>"
+	" use expr will cause search() to not work
+	execute 'inoremap <silent> ' .. args .. key .. " <C-R>=" .. a:func .. "('" .. escaped_key .. "')<CR>"
 
 	if a:buffer
 		call add(b:pear_maps, escaped_key)
@@ -234,9 +234,9 @@ endfunction
 " Issue talk: https://github.com/jiangmiao/auto-pairs/issues/3
 " Vim note: https://github.com/vim/vim/releases/tag/v7.4.849
 if v:version > 704 || v:version == 704 && has("patch849")
-  let s:go = "\<C-G>U"
+	let s:go = "\<C-G>U"
 else
-  let s:go = ""
+	let s:go = ""
 endif
 
 let s:left = s:go .. "\<LEFT>"
@@ -244,11 +244,11 @@ let s:right = s:go .. "\<RIGHT>"
 
 " unicode len
 function! s:ulen(s)
-  return len(split(a:s, '\zs'))
+	return len(split(a:s, '\zs'))
 endfunction
 
 function! s:lefts(s)
-  return repeat(s:left, s:ulen(a:s))
+	return repeat(s:left, s:ulen(a:s))
 endfunction
 
 " -----------------------------------------
