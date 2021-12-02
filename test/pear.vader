@@ -61,19 +61,26 @@ Expect:
 
 # -----------------------
 
-Given:
+Given (special cases):
   line a
   line b
   line c()
 
 Do (delete pair):
   A(\<BS>
-  \<Esc>
-  jj$i\<BS>
 Expect:
   line a
   line b
-  line c
+  line c()
+
+Execute:
+  setlocal backspace+=start
+Do (delete existing pair):
+  G$i\<BS>|
+Expect:
+  line a
+  line b
+  line c|
 
 Do (redo):
   A(\<Esc>j.
