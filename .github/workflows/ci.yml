@@ -1,0 +1,15 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: dependencies
+      run: git clone https://github.com/junegunn/vader.vim.git
+    - name: test
+      run: vim -Nu <(printf 'set rtp+=%s\n' 'vader.vim' '.') -c 'Vader! test/*' >/dev/null
