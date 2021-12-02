@@ -5,7 +5,7 @@
 
 let s:less_than_checked = { 'pair': '>', 'before': '(^|\S)$' }
 let s:space_or_eol = '^(\s|$)'
-let s:non_quotable = '^([^[:alnum:]]|$)' " allow quotes up against non-alnum chars
+let s:non_quotable = '^($|\s|[])}])' " allow quotes before specific chars
 
 let s:pairs = {
 \  '(': { 'pair': ')', 'after': s:space_or_eol },

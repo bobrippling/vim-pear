@@ -88,7 +88,7 @@ Expect:
 
 # -----------------------
 
-Given:
+Given (quoting):
   so they say
 
 Do (quote):
@@ -110,49 +110,84 @@ Expect:
 
 # -----------------------
 
-Given:
+Given (quote before/after):
   ab xy()
   12 34
+  - a
 
 Do (quote inside parens):
   $i'x
 Expect:
   ab xy('x')
   12 34
+  - a
 
 Do (quote inside parens and stepover):
   $i'x'
 Expect:
   ab xy('x')
   12 34
+  - a
 
 Do (quote before letter):
   i'
 Expect:
   'ab xy()
   12 34
+  - a
 
 Do (quote before letter, non-start-of-line):
   f a'
 Expect:
   ab 'xy()
   12 34
+  - a
 
 Do (quote before number):
   ji'
 Expect:
   ab xy()
   '12 34
+  - a
 
 Do (quote before number, non-start-of-line):
   jf a'
 Expect:
   ab xy()
   12 '34
+  - a
+
+Do (quote before non-alnum):
+  2ji'
+Expect:
+  ab xy()
+  12 34
+  '- a
+
+Do (quote before non-alnum, non-start-of-line):
+  2ji \<Esc>I'
+Expect:
+  ab xy()
+  12 34
+   '- a
+
+Do (double-quote before non-alnum):
+  2ji"
+Expect:
+  ab xy()
+  12 34
+  "- a
+
+Do (double-quote before non-alnum, non-start-of-line):
+  2ji \<Esc>I"
+Expect:
+  ab xy()
+  12 34
+   "- a
 
 # -----------------------
 
-Given:
+Given (triple quoting):
   def f():
 
 Execute:
