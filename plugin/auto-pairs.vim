@@ -5,18 +5,19 @@
 
 let s:less_than_checked = { 'pair': '>', 'before': '(^|\S)$' }
 let s:space_or_eol = '^(\s|$)'
+let s:non_quotable = '^([^[:alnum:]]|$)' " allow quotes up against non-alnum chars
 
 let s:pairs = {
 \  '(': { 'pair': ')', 'after': s:space_or_eol },
 \  '[': { 'pair': ']', 'after': s:space_or_eol },
 \  '{': { 'pair': '}', 'after': s:space_or_eol },
 \  '<': s:less_than_checked,
-\  "'": { 'pair': "'", 'after': s:space_or_eol, 'before': '[^[:alpha:]]$' },
-\  '"': { 'pair': '"', 'after': s:space_or_eol },
-\  '```': { 'pair': '```', 'after': s:space_or_eol },
-\  '"""': { 'pair': '"""', 'after': s:space_or_eol },
-\  "'''": { 'pair': "'''", 'after': s:space_or_eol },
-\  "`": { 'pair': "`", 'after': s:space_or_eol }
+\  "'": { 'pair': "'", 'after': s:non_quotable, 'before': '[^[:alnum:]]$' },
+\  '"': { 'pair': '"', 'after': s:non_quotable },
+\  '```': { 'pair': '```', 'after': s:non_quotable },
+\  '"""': { 'pair': '"""', 'after': s:non_quotable },
+\  "'''": { 'pair': "'''", 'after': s:non_quotable },
+\  "`": { 'pair': "`", 'after': s:non_quotable }
 \}
 
 let s:pairs_per_ft = {

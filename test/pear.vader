@@ -109,6 +109,48 @@ Expect:
 # -----------------------
 
 Given:
+  ab xy()
+  12 34
+
+Do (quote inside parens):
+  $i'x
+Expect:
+  ab xy('x')
+  12 34
+
+Do (quote inside parens and stepover):
+  $i'x'
+Expect:
+  ab xy('x')
+  12 34
+
+Do (quote before letter):
+  i'
+Expect:
+  'ab xy()
+  12 34
+
+Do (quote before letter, non-start-of-line):
+  f a'
+Expect:
+  ab 'xy()
+  12 34
+
+Do (quote before number):
+  ji'
+Expect:
+  ab xy()
+  '12 34
+
+Do (quote before number, non-start-of-line):
+  jf a'
+Expect:
+  ab xy()
+  12 '34
+
+# -----------------------
+
+Given:
   def f():
 
 Execute:
