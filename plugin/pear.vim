@@ -144,7 +144,7 @@ function! s:insert_open_or_stepover(key, ent)
 		endif
 	endif
 
-	return a:key .. close .. s:lefts(close)
+	return a:key .. close .. s:repeated(s:left, close)
 endfunction
 
 function! s:surrounded()
@@ -247,8 +247,8 @@ function! s:ulen(s)
 	return len(split(a:s, '\zs'))
 endfunction
 
-function! s:lefts(s)
-	return repeat(s:left, s:ulen(a:s))
+function! s:repeated(s, by)
+	return repeat(a:s, s:ulen(a:by))
 endfunction
 
 " -----------------------------------------
