@@ -25,7 +25,7 @@ let s:pairs_per_ft = {
 \    '"': { 'pair': '"', 'after': s:space_or_eol, 'before': '\S' },
 \  },
 \  'rust': {
-\    "'": { 'pair': "'", 'before': '(^|[^&])$' },
+\    "'": { 'pair': "'", 'before': s:pairs["'"].before, 'before-not': '[&+] *$' },
 \  },
 \}
 
@@ -139,6 +139,12 @@ function! s:insert_open_or_stepover(key, ent)
 	let re_before = get(ent, 'before', '')
 	if !empty(re_before) && match(before, '\v' .. re_before) ==# -1
 		"echom "didn't match /" .. re_before .. "/ against '" .. before .. "'"
+		return a:key
+	endif
+
+	let re_before_not = get(ent, 'before-not', '')
+	if !empty(re_before_not) && match(before, '\v' .. re_before_not) !=# -1
+		"echom "matched /" .. re_before_not .. "/ against '" .. before .. "'"
 		return a:key
 	endif
 

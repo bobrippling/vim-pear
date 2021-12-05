@@ -272,7 +272,20 @@ Expect:
     a::x < y
   }
 
+Do:
+  cGVec<xyz<
+Expect:
+  Vec<xyz<>>
+
 # -----------------------
+Given rust (lifetimes):
+  Trait
+
+Do:
+  A + 'a\<Enter>+'a
+Expect:
+  Trait + 'a
+  +'a
 
 #Before:
 #  function! s:assert_at(line, col)
