@@ -76,7 +76,7 @@ endfunction
 
 function! PearReturn()
 	if !s:enabled()
-		return ''
+		return "\<CR>"
 	end
 
 	let ent = s:surrounded(1)
