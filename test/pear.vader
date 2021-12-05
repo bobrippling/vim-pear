@@ -1,5 +1,5 @@
 Before:
-  command! SetIndent setlocal autoindent cindent expandtab tabstop=8
+  command! SetIndent setlocal autoindent cindent expandtab tabstop=8 cinoptions+=(1s,u0
 
 # -----------------------
 
@@ -40,6 +40,37 @@ Expect:
   void f(){
           |
   }
+
+# -----------------------
+
+Given (newline parens, with cindent):
+  Ok()
+
+Execute:
+  SetIndent
+
+Do:
+  $i\<Enter>|
+Expect:
+  Ok(
+          |
+  )
+
+# -----------------------
+
+Given (newline parens, without cindent):
+  Ok()
+
+Execute:
+  SetIndent
+  setlocal nocindent
+
+Do:
+  $i\<Enter>|
+Expect:
+  Ok(
+  |
+  )
 
 # -----------------------
 

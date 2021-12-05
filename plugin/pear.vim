@@ -68,7 +68,7 @@ function! PearDelete()
 		return "\<BS>"
 	end
 
-	if !s:surrounded()
+	if !s:surrounded(0)
 		return "\<BS>"
 	endif
 	return "\<BS>\<DELETE>"
@@ -79,11 +79,18 @@ function! PearReturn()
 		return ''
 	end
 
-	if !s:surrounded()
+	let ent = s:surrounded(1)
+	if ent is 0
 		return "\<CR>"
 	endif
 
-	return "\<CR>\<C-O>O"
+	if !&cindent
+		" we'll indent nicely already
+		return "\<CR>\<C-O>O"
+	endif
+
+	" <Enter><Esc>O works, but leaves indent skewed, so:
+	return "\<CR>\<Esc>k^jd^O"
 endfunction
 
 function! PearInitFt()
@@ -147,7 +154,7 @@ function! s:insert_open_or_stepover(key, ent)
 	return a:key .. close .. s:repeated(s:left, close)
 endfunction
 
-function! s:surrounded()
+function! s:surrounded(ret_ent)
 	let pos = col('.') - 1
 	if pos ==# 0
 		return 0
@@ -166,7 +173,7 @@ function! s:surrounded()
 		return 0
 	endif
 
-	return 1
+	return a:ret_ent ? ent : 1
 endfunction
 
 " -----------------------------------------
