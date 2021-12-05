@@ -4,13 +4,13 @@
 " License: MIT
 
 let s:less_than_checked = { 'pair': '>', 'before': '(^|\S)$' }
-let s:space_or_eol = '^(\s|$)'
+let s:after_paren = '^([^a-zA-Z0-9$_]|$)'
 let s:non_quotable = '^($|\s|[])}])' " allow quotes before specific chars
 
 let s:pairs = {
-\  '(': { 'pair': ')', 'after': s:space_or_eol },
-\  '[': { 'pair': ']', 'after': s:space_or_eol },
-\  '{': { 'pair': '}', 'after': s:space_or_eol },
+\  '(': { 'pair': ')', 'after': s:after_paren },
+\  '[': { 'pair': ']', 'after': s:after_paren },
+\  '{': { 'pair': '}', 'after': s:after_paren },
 \  '<': s:less_than_checked,
 \  "'": { 'pair': "'", 'after': s:non_quotable, 'before': '(^|[^[:alnum:]])$' },
 \  '"': { 'pair': '"', 'after': s:non_quotable },
@@ -22,7 +22,7 @@ let s:pairs = {
 
 let s:pairs_per_ft = {
 \  'vim': {
-\    '"': { 'pair': '"', 'after': s:space_or_eol, 'before': '\S' },
+\    '"': { 'pair': '"', 'after': '^(\s|$)', 'before': '\S' },
 \  },
 \  'rust': {
 \    "'": { 'pair': "'", 'before': s:pairs["'"].before, 'before-not': '[&+] *$' },

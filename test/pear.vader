@@ -16,6 +16,11 @@ Do (stepover):
 Expect:
   void f()|
 
+Do (complete near non-word):
+  A;\<Esc>i(
+Expect:
+  void f();
+
 # -----------------------
 
 Given (stepover existing):
