@@ -21,6 +21,11 @@ Do (complete near non-word):
 Expect:
   void f();
 
+Do (open curly inside parens):
+  A({|
+Expect:
+  void f({|})
+
 # -----------------------
 
 Given (stepover existing):
@@ -131,6 +136,13 @@ Expect:
   line a\(
   line b
   line c()
+
+Do (keep close paren despite being next to one):
+  G$if(
+Expect:
+  line a
+  line b
+  line c(f())
 
 # -----------------------
 
