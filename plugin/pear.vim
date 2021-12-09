@@ -26,6 +26,7 @@ let s:pairs_per_ft = {
 \  },
 \  'rust': {
 \    "'": { 'pair': "'", 'before': s:pairs["'"].before, 'before-not': '[&+] *$' },
+\    "|": { 'pair': "|", 'before': '[,(] *$', 'after': '^($|\))' }
 \  },
 \}
 

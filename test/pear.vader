@@ -283,6 +283,36 @@ Expect:
   Vec<xyz<>>
 
 # -----------------------
+
+Given rust:
+  a.filter(
+
+Do:
+  A|x
+Expect:
+  a.filter(|x|
+
+Do:
+  A||x
+Expect:
+  a.filter(||x
+
+Do:
+  A|x| x.0
+Expect:
+  a.filter(|x| x.0
+
+Do:
+  A|x| x | 1)
+Expect:
+  a.filter(|x| x | 1)
+
+Do:
+  A|x\<Esc>A x | 1)
+Expect:
+  a.filter(|x| x | 1)
+
+# -----------------------
 Given rust (lifetimes):
   Trait
 
