@@ -258,6 +258,16 @@ Expect (stepover currently doesn't work for multi-char closes):
 
 # -----------------------
 
+Given:
+  n
+
+Do:
+  A << 1
+Expect:
+  n << 1
+
+# -----------------------
+
 Given rust:
   fn f() {
     a::
