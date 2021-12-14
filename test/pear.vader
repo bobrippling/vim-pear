@@ -355,6 +355,11 @@ Expect:
   Trait
   where 'a:
 
+Do:
+  A: 'a,
+Expect:
+  Trait: 'a,
+
 #Before:
 #  function! s:assert_at(line, col)
 #    let [off, curswant] = [0, 1]
