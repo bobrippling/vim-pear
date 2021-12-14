@@ -26,6 +26,11 @@ Do (open curly inside parens):
 Expect:
   void f({|})
 
+Do (open paren before paren):
+  A(\<Esc>lD$i(|
+Expect:
+  void f(|(
+
 # -----------------------
 
 Given (stepover existing):
