@@ -349,6 +349,12 @@ Expect:
   Trait + 'a
   +'a
 
+Do:
+  A\<Enter>where 'a:
+Expect:
+  Trait
+  where 'a:
+
 #Before:
 #  function! s:assert_at(line, col)
 #    let [off, curswant] = [0, 1]
