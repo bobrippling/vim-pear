@@ -245,7 +245,7 @@ Expect:
 
 # -----------------------
 
-Given (triple quoting):
+Given python (triple quoting):
   def f():
 
 Execute:

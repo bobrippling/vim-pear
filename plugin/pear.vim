@@ -14,10 +14,8 @@ let s:pairs = {
 \  '<': s:less_than_checked,
 \  "'": { 'pair': "'", 'after': s:non_quotable, 'before': '(^|[^[:alnum:]])$' },
 \  '"': { 'pair': '"', 'after': s:non_quotable },
-\  '```': { 'pair': '```', 'after': s:non_quotable },
-\  '"""': { 'pair': '"""', 'after': s:non_quotable },
-\  "'''": { 'pair': "'''", 'after': s:non_quotable },
-\  "`": { 'pair': "`", 'after': s:non_quotable }
+\  "`": { 'pair': "`", 'after': s:non_quotable },
+\  '```': { 'pair': '```', 'after': s:non_quotable }
 \}
 
 let s:pairs_per_ft = {
@@ -27,6 +25,10 @@ let s:pairs_per_ft = {
 \  'rust': {
 \    "'": { 'pair': "'", 'before': s:pairs["'"].before, 'before-not': '[&+] *$' },
 \    "|": { 'pair': "|", 'before': '[,(] *$', 'after': '^($|\))' }
+\  },
+\  'python': {
+\    '"""': { 'pair': '"""', 'after': s:non_quotable },
+\    "'''": { 'pair': "'''", 'after': s:non_quotable },
 \  },
 \}
 
