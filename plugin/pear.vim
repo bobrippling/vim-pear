@@ -24,7 +24,7 @@ let s:pairs_per_ft = {
 \  },
 \  'rust': {
 \    "'": { 'pair': "'", 'before': s:pairs["'"].before, 'before-not': "[&+] *$|<(where) +$|^[^']*'[^']*: *$|[A-Z]\\k* *: *$" },
-\    "|": { 'pair': "|", 'before': '[,(] *$', 'after': '^($|\))' }
+\    "|": { 'pair': "|", 'before': '[,(=] *$', 'after': '^($|\))' }
 \  },
 \  'python': {
 \    '"""': { 'pair': '"""', 'after': s:non_quotable },

@@ -339,6 +339,11 @@ Do:
 Expect:
   a.filter(|x| x | 1)
 
+Do:
+  Slet a = |x
+Expect:
+  let a = |x|
+
 # -----------------------
 Given rust (lifetimes):
   Trait
