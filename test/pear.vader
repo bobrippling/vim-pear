@@ -365,6 +365,26 @@ Do:
 Expect:
   Trait: 'a,
 
+Do:
+  A<'a|
+Expect:
+  Trait<'a|>
+
+Do:
+  A<'a,|
+Expect:
+  Trait<'a,|>
+
+Do:
+  A<\<Esc>$i'a
+Expect:
+  Trait<'a>
+
+Do:
+  A<X\<Esc>$i, 'a
+Expect:
+  Trait<X, 'a>
+
 #Before:
 #  function! s:assert_at(line, col)
 #    let [off, curswant] = [0, 1]

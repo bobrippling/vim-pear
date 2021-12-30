@@ -23,7 +23,14 @@ let s:rust_lifetime_before_not = [
 \  '<where +$',
 \  "^[^']*'[^']*: *$",
 \  '[A-Z]\k* *: *$',
+\  "\\k\\<(('[a-z]+|\\k+), *)*$",
 \]
+" above correspond to:
+"   &'a i32
+"   where 'a: ...
+"   'a: 'b
+"   T: 'a
+"   T<'a>, T<'b, 'a>, T<X, 'a, Y, 'b>
 
 let s:pairs_per_ft = {
 \  'vim': {
