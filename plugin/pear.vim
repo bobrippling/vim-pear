@@ -18,12 +18,19 @@ let s:pairs = {
 \  '```': { 'pair': '```', 'after': s:non_quotable }
 \}
 
+let s:rust_lifetime_before_not = [
+\  '[&+] *$',
+\  '<where +$',
+\  "^[^']*'[^']*: *$",
+\  '[A-Z]\k* *: *$',
+\]
+
 let s:pairs_per_ft = {
 \  'vim': {
 \    '"': { 'pair': '"', 'after': '^(\s|$)', 'before': '\S' },
 \  },
 \  'rust': {
-\    "'": { 'pair': "'", 'before': s:pairs["'"].before, 'before-not': "[&+] *$|<(where) +$|^[^']*'[^']*: *$|[A-Z]\\k* *: *$" },
+\    "'": { 'pair': "'", 'before': s:pairs["'"].before, 'before-not': join(s:rust_lifetime_before_not, '|') },
 \    "|": { 'pair': "|", 'before': '[,(=] *$', 'after': '^($|\))' }
 \  },
 \  'python': {
