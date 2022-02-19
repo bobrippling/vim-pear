@@ -113,7 +113,7 @@ endfunction
 function! PearInitFt()
 	if exists('b:pear_maps')
 		for key in b:pear_maps
-			execute "silent! iunmap <buffer> " .. key
+			execute "silent! iunmap <buffer> " . key
 		endfor
 	endif
 
@@ -154,27 +154,27 @@ function! s:insert_open_or_stepover(key, ent)
 	endif
 
 	let re_before = get(ent, 'before', '')
-	if !empty(re_before) && match(before, '\v' .. re_before) ==# -1
-		"echom "didn't match /" .. re_before .. "/ against '" .. before .. "'"
+	if !empty(re_before) && match(before, '\v' . re_before) ==# -1
+		"echom "didn't match /" . re_before . "/ against '" . before . "'"
 		return a:key
 	endif
 
 	let re_before_not = get(ent, 'before-not', '')
-	if !empty(re_before_not) && match(before, '\v' .. re_before_not) !=# -1
-		"echom "matched /" .. re_before_not .. "/ against '" .. before .. "'"
+	if !empty(re_before_not) && match(before, '\v' . re_before_not) !=# -1
+		"echom "matched /" . re_before_not . "/ against '" . before . "'"
 		return a:key
 	endif
 
 	let re_after = get(ent, 'after', '')
 	if !empty(re_after)
 		let after = strpart(line, pos)
-		if match(after, '\v' .. re_after) ==# -1
-			"echom "didn't match /" .. re_after .. "/ against '" .. after .. "'"
+		if match(after, '\v' . re_after) ==# -1
+			"echom "didn't match /" . re_after . "/ against '" . after . "'"
 			return a:key
 		endif
 	endif
 
-	return a:key .. close .. s:repeated(s:left, close)
+	return a:key . close . s:repeated(s:left, close)
 endfunction
 
 function! s:surrounded(ret_ent)
@@ -226,7 +226,7 @@ function! s:init()
 	execute 'inoremap <silent> <CR> <C-R>=PearReturn()<CR>'
 
 	let fts = keys(s:pairs_per_ft)
-	execute "autocmd FileType " .. join(fts, ",") .. " call PearInitFt()"
+	execute "autocmd FileType " . join(fts, ",") . " call PearInitFt()"
 endfunction
 
 function! s:imap_pair(key, buffer)
@@ -251,7 +251,7 @@ function! s:imap(key, func, buffer)
 	let args = a:buffer ? '<buffer> ' : ''
 
 	" use expr will cause search() to not work
-	execute 'inoremap <silent> ' .. args .. key .. " <C-R>=" .. a:func .. "('" .. escaped_key .. "')<CR>"
+	execute 'inoremap <silent> ' . args . key . " <C-R>=" . a:func . "('" . escaped_key . "')<CR>"
 
 	if a:buffer
 		call add(b:pear_maps, escaped_key)
@@ -269,8 +269,8 @@ else
 	let s:go = ""
 endif
 
-let s:left = s:go .. "\<LEFT>"
-let s:right = s:go .. "\<RIGHT>"
+let s:left = s:go . "\<LEFT>"
+let s:right = s:go . "\<RIGHT>"
 
 " unicode len
 function! s:ulen(s)
