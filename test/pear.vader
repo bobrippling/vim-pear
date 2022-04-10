@@ -105,6 +105,19 @@ Expect:
   needs_surrounding)
   I'm
 
+Given (don't parenthesize/quote non-alpha):
+  (a, tuple)
+
+Do:
+  I<\<Esc>A>
+Expect:
+  <(a, tuple)>
+
+Do:
+  I(\<Esc>A)
+Expect:
+  ((a, tuple))
+
 # -----------------------
 
 Given (special cases):

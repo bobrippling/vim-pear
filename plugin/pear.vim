@@ -3,9 +3,14 @@
 " Version: 1.0.0
 " License: MIT
 
-let s:less_than_checked = { 'pair': '>', 'before': '(^|[^ \t<])$' }
 let s:after_paren = '^([^a-zA-Z0-9$_({[]|$)'
 let s:non_quotable = '^($|\s|[])}])' " allow quotes before specific chars
+
+let s:less_than_checked = {
+\  'pair': '>',
+\  'before': '(^|[^ \t<])$',
+\  'after': s:after_paren,
+\ }
 
 let s:pairs = {
 \  '(': { 'pair': ')', 'after': s:after_paren },
