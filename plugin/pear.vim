@@ -17,9 +17,9 @@ let s:pairs = {
 \  '[': { 'pair': ']', 'after': s:after_paren },
 \  '{': { 'pair': '}', 'after': s:after_paren },
 \  '<': s:less_than_checked,
-\  "'": { 'pair': "'", 'after': s:non_quotable, 'before': '(^|[^[:alnum:]])$' },
-\  '"': { 'pair': '"', 'after': s:non_quotable },
-\  "`": { 'pair': "`", 'after': s:non_quotable },
+\  "'": { 'pair': "'", 'after': s:non_quotable, 'before': '(^|[^[:alnum:]])$', 'only-if-even': 1 },
+\  '"': { 'pair': '"', 'after': s:non_quotable, 'only-if-even': 1 },
+\  "`": { 'pair': "`", 'after': s:non_quotable, 'only-if-even': 1 },
 \  '```': { 'pair': '```', 'after': s:non_quotable }
 \}
 
@@ -175,6 +175,15 @@ function! s:insert_open_or_stepover(key, ent)
 		let after = strpart(line, pos)
 		if match(after, '\v' . re_after) ==# -1
 			"echom "didn't match /" . re_after . "/ against '" . after . "'"
+			return a:key
+		endif
+	endif
+
+	if get(ent, 'only-if-even', 0)
+		" don't insert a corresponding close if there's an odd number before
+		let n = count(before, a:key)
+		if n % 2 != 0
+			"echom "odd number (" . n . ") of '" . a:key
 			return a:key
 		endif
 	endif
