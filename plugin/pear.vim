@@ -29,6 +29,7 @@ let s:rust_lifetime_before_not = [
 \  "^[^']*'[^']*: *$",
 \  '[A-Z]\k* *: *$',
 \  "\\k\\<(('[a-z]+|\\k+), *)*$",
+\  "^\s*$",
 \]
 " above correspond to:
 "   &'a i32
@@ -36,6 +37,7 @@ let s:rust_lifetime_before_not = [
 "   'a: 'b
 "   T: 'a
 "   T<'a>, T<'b, 'a>, T<X, 'a, Y, 'b>
+"   new/empty line, label
 
 let s:pairs_per_ft = {
 \  'vim': {

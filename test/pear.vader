@@ -409,6 +409,11 @@ Do:
 Expect:
   Trait<X, 'a>
 
+Do:
+  S'label:
+Expect:
+  'label:
+
 #Before:
 #  function! s:assert_at(line, col)
 #    let [off, curswant] = [0, 1]
