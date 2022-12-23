@@ -367,6 +367,12 @@ Given rust (lifetimes):
   Trait
 
 Do:
+  Sfunc('c\<Esc>olet ch = 'x
+Expect:
+  func('c')
+  let ch = 'x'
+
+Do:
   A + 'a\<Enter>+'a
 Expect:
   Trait + 'a
