@@ -54,7 +54,7 @@ let s:pairs_per_ft = {
 \}
 
 function! PearInsert(key)
-	if !s:enabled()
+	if !s:enabled() || pumvisible()
 		return a:key
 	end
 
@@ -76,7 +76,7 @@ function! PearInsert(key)
 endfunction
 
 function! PearStepover(key)
-	if !s:enabled()
+	if !s:enabled() || pumvisible()
 		return a:key
 	end
 
@@ -88,7 +88,7 @@ function! PearStepover(key)
 endfunction
 
 function! PearDelete()
-	if !s:enabled()
+	if !s:enabled() || pumvisible()
 		return "\<BS>"
 	end
 

@@ -303,6 +303,22 @@ Expect:
 
 # -----------------------
 
+# C-X, C-L for menu, C-N x2 for clearing inserted text,
+# then type out up to the quote to see if it's matched
+#Given (popup menu):
+#  abc: "xyz"
+#  ab
+#Do:
+#  GA\<C-X>\<C-L>\<C-N>c: "\<Esc>
+#Expect:
+#  abc: "xyz"
+#  abc: "
+#
+# Test doesn't seem to work, might be because vim's headless,
+# works ok interactively
+
+# -----------------------
+
 Given rust:
   fn f() {
     a::
