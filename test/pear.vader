@@ -293,7 +293,7 @@ Expect (stepover currently doesn't work for multi-char closes):
 
 # -----------------------
 
-Given:
+Given (shifting):
   n
 
 Do:
@@ -316,6 +316,16 @@ Expect:
 #
 # Test doesn't seem to work, might be because vim's headless,
 # works ok interactively
+
+# -----------------------
+
+Given (replace mode):
+  a  123
+
+Do:
+  lR(
+Expect:
+  a( 123
 
 # -----------------------
 

@@ -138,7 +138,7 @@ endfunction
 " -----------------------------------------
 
 function! s:skip()
-	return exists('b:pear_enabled') && !b:pear_enabled
+	return mode() ==# 'R' || (exists('b:pear_enabled') && !b:pear_enabled)
 endfunction
 
 function! s:insert_open_or_stepover(key, ent)
