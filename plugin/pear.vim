@@ -54,7 +54,7 @@ let s:pairs_per_ft = {
 \}
 
 function! PearInsert(key)
-	if !s:enabled() || pumvisible()
+	if s:skip() || pumvisible()
 		return a:key
 	end
 
@@ -76,7 +76,7 @@ function! PearInsert(key)
 endfunction
 
 function! PearStepover(key)
-	if !s:enabled() || pumvisible()
+	if s:skip() || pumvisible()
 		return a:key
 	end
 
@@ -88,7 +88,7 @@ function! PearStepover(key)
 endfunction
 
 function! PearDelete()
-	if !s:enabled() || pumvisible()
+	if s:skip() || pumvisible()
 		return "\<BS>"
 	end
 
@@ -99,7 +99,7 @@ function! PearDelete()
 endfunction
 
 function! PearReturn()
-	if !s:enabled()
+	if s:skip()
 		return "\<CR>"
 	end
 
@@ -137,8 +137,8 @@ endfunction
 
 " -----------------------------------------
 
-function! s:enabled()
-	return !exists('b:pear_enabled') || b:pear_enabled
+function! s:skip()
+	return exists('b:pear_enabled') && !b:pear_enabled
 endfunction
 
 function! s:insert_open_or_stepover(key, ent)
