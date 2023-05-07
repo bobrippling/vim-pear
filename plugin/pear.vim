@@ -76,7 +76,8 @@ function! PearInsert(key)
 endfunction
 
 function! PearStepover(key)
-	if s:skip() || pumvisible()
+	" don't check pumvisible() here - permit closing a pair during completion
+	if s:skip()
 		return a:key
 	end
 
