@@ -169,6 +169,25 @@ Expect:
 
 # -----------------------
 
+Given (special case curly braces):
+  if(x)
+    y
+  abc
+  while(x)
+  not-indented
+
+Do (add opening curly):
+  A{\<Esc>jA{\<Esc>3jA{
+Expect:
+  if(x){
+    y{}
+  }
+  abc
+  while(x){}
+  not-indented
+
+# -----------------------
+
 Given (quoting):
   so they say
 

@@ -14,8 +14,8 @@ let s:less_than_checked = {
 
 let s:pairs = {
 \  '(': { 'pair': ')', 'after': s:after_paren },
-\  '[': { 'pair': ']', 'after': s:after_paren },
-\  '{': { 'pair': '}', 'after': s:after_paren },
+\  '[': { 'pair': ']', 'after': s:after_paren, 'close-line': 1 },
+\  '{': { 'pair': '}', 'after': s:after_paren, 'close-line': 1 },
 \  '<': s:less_than_checked,
 \  "'": { 'pair': "'", 'after': s:non_quotable, 'before': '(^|[^[:alnum:]])$', 'only-if-even': 1 },
 \  '"': { 'pair': '"', 'after': s:non_quotable, 'only-if-even': 1 },
@@ -191,7 +191,51 @@ function! s:insert_open_or_stepover(key, ent)
 		endif
 	endif
 
+	if get(ent, 'close-line', 0) && s:maybe_insert_matching_close(close)
+		return a:key
+	endif
+
 	return a:key . close . s:repeated(s:left, close)
+endfunction
+
+function! s:maybe_insert_matching_close(close)
+	let l = line('.')
+	let curindent = indent(l)
+
+	"echom "looking for where to add " . a:close . " after line " . l
+
+	let l_start = l
+	let l_end = line('$')
+
+	let l += 1
+	let nextindent = indent(l)
+	if nextindent <= curindent
+		"echom "no indent after line" l . ", cancelled"
+		return 0
+	endif
+
+	let found = 0
+	while l <= l_end
+		if !empty(getline(l))
+			let i = indent(l)
+			if i < nextindent
+				let found = 1
+				break
+			endif
+		endif
+		let l += 1
+	endwhile
+
+	if !found
+		"echom "no line found"
+		return 0
+	endif
+
+	"echom "line found: " . l
+	let indent = substitute(getline(l_start), '\S.*', '', '')
+	call append(l - 1, indent . a:close)
+
+	return 1
 endfunction
 
 function! s:surrounded(ret_ent)
