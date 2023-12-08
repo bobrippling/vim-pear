@@ -389,6 +389,7 @@ Expect:
   let a = |x|
 
 # -----------------------
+
 Given rust (lifetimes):
   Trait
 
