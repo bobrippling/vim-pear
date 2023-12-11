@@ -175,9 +175,12 @@ Given (special case curly braces):
   abc
   while(x)
   not-indented
+  loop
+    print("hi")
+  }
 
 Do (add opening curly):
-  A{\<Esc>jA{\<Esc>3jA{
+  A{\<Esc>jA{\<Esc>3jA{\<Esc>2jA{
 Expect:
   if(x){
     y{}
@@ -185,6 +188,9 @@ Expect:
   abc
   while(x){}
   not-indented
+  loop{
+    print("hi")
+  }
 
 # -----------------------
 
