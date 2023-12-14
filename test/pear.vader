@@ -179,8 +179,14 @@ Given (special case curly braces):
     print("hi")
   }
 
+  while
+    to-wrap
+
+
+  after-gap
+
 Do (add opening curly):
-  A{\<Esc>jA{\<Esc>3jA{\<Esc>2jA{
+  A{\<Esc>jA{\<Esc>3jA{\<Esc>2jA{\<Esc>%2jA{
 Expect:
   if(x){
     y{}
@@ -191,6 +197,13 @@ Expect:
   loop{
     print("hi")
   }
+
+  while{
+    to-wrap
+  }
+
+
+  after-gap
 
 # -----------------------
 

@@ -237,7 +237,13 @@ function! s:maybe_insert_matching_close(close)
 	if getline(l) =~# '^' . indent . a:close
 		"echom "already has closing pair, skipping insertion only"
 	else
-		call append(l - 1, indent . a:close)
+		" wind back to the last non-empty line
+		let l -= 1
+		while l > 0 && empty(getline(l))
+			let l -= 1
+		endwhile
+
+		call append(l, indent . a:close)
 	endif
 
 	return 1
