@@ -231,7 +231,7 @@ function! s:maybe_insert_matching_close(close)
 		return 0
 	endif
 
-	echom "line found: " . l
+	"echom "line found: " . l
 	let indent = substitute(getline(l_start), '\S.*', '', '')
 
 	if getline(l) =~# '^' . indent . a:close
