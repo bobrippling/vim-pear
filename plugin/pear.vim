@@ -209,20 +209,29 @@ function! s:maybe_insert_matching_close(close)
 
 	let l += 1
 	let nextindent = indent(l)
-	if nextindent <= curindent
+	" second part below: nothing to wrap
+	if nextindent < curindent || (curindent == 0 && empty(getline(l_start+1)))
 		"echom "no indent after line" l . ", cancelled"
 		return 0
 	endif
 
+	let find_empty = nextindent == curindent
+
 	let found = 0
 	while l <= l_end
-		if !empty(getline(l))
+		let is_empty = empty(getline(l))
+
+		if !is_empty
 			let i = indent(l)
-			if i < nextindent
+			if i < (find_empty ? curindent : nextindent)
 				let found = 1
 				break
 			endif
+		elseif find_empty
+			let found = 1
+			break
 		endif
+
 		let l += 1
 	endwhile
 
@@ -234,11 +243,19 @@ function! s:maybe_insert_matching_close(close)
 	"echom "line found: " . l
 	let indent = substitute(getline(l_start), '\S.*', '', '')
 
-	if getline(l) =~# '^' . indent . a:close
+	if find_empty && is_empty
+		let candidate = getline(max([l-1, l_start+1]))
+	else
+		let candidate = getline(l)
+	endif
+
+	if candidate =~# '^' . indent . a:close
 		"echom "already has closing pair, skipping insertion only"
 	else
 		" wind back to the last non-empty line
-		let l -= 1
+		if !find_empty || !is_empty
+			let l -= 1
+		endif
 		while l > 0 && empty(getline(l))
 			let l -= 1
 		endwhile

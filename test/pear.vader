@@ -174,7 +174,14 @@ Given (special case curly braces):
     y
   abc
   while(x)
+
+  while(x)
   not-indented
+
+  while(x)
+  not-indented2
+  }
+
   loop
     print("hi")
   }
@@ -182,18 +189,25 @@ Given (special case curly braces):
   while
     to-wrap
 
-
   after-gap
 
 Do (add opening curly):
-  A{\<Esc>jA{\<Esc>3jA{\<Esc>2jA{\<Esc>%2jA{
+  A{\<Esc>jA{\<Esc>3jA{\<Esc>2jA{\<Esc>%2jA{\<Esc>%2jA{\<Esc>%2jA{\<Esc>
 Expect:
   if(x){
     y{}
   }
   abc
   while(x){}
+
+  while(x){
   not-indented
+  }
+
+  while(x){
+  not-indented2
+  }
+
   loop{
     print("hi")
   }
@@ -201,7 +215,6 @@ Expect:
   while{
     to-wrap
   }
-
 
   after-gap
 
