@@ -14,7 +14,7 @@ let s:less_than_checked = {
 
 let s:pairs = {
 \  '(': { 'pair': ')', 'after': s:after_paren },
-\  '[': { 'pair': ']', 'after': s:after_paren, 'close-line': 1 },
+\  '[': { 'pair': ']', 'after': s:after_paren },
 \  '{': { 'pair': '}', 'after': s:after_paren, 'close-line': 1 },
 \  '<': s:less_than_checked,
 \  "'": { 'pair': "'", 'after': s:non_quotable, 'before': '(^|[^[:alnum:]])$', 'only-if-even': 1 },
