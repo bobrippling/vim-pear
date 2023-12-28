@@ -186,7 +186,7 @@ Given (special case curly braces):
     print("hi")
   }
 
-  while
+  for()
     to-wrap
 
   after-gap
@@ -212,11 +212,31 @@ Expect:
     print("hi")
   }
 
-  while{
+  for(){
     to-wrap
   }
 
   after-gap
+
+# loop is special cased, otherwise we look for parens:
+Given (special case curly braces exceptions):
+  const
+  abc
+  for(x)
+  body
+
+  fin
+
+Do (add curly):
+  A{\<Esc>2jA{\<Esc>
+Expect:
+  const{}
+  abc
+  for(x){
+  body
+  }
+
+  fin
 
 # -----------------------
 

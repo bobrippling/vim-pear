@@ -199,7 +199,13 @@ function! s:insert_open_or_stepover(key, ent)
 endfunction
 
 function! s:maybe_insert_matching_close(close)
-	let l = line('.')
+	" don't do this for pairs which are likely to want to remain on a single line
+	let [_buf, l, col, off, _curswant] = getcurpos()
+	let relevant = getline(l)[:col - 1]
+	if stridx(relevant, ")") < 0 && relevant !~# '\<loop\>'
+		return 0
+	endif
+
 	let curindent = indent(l)
 
 	"echom "looking for where to add " . a:close . " after line " . l
