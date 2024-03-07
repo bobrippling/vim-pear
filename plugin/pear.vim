@@ -93,7 +93,7 @@ function! PearDelete()
 		return "\<BS>"
 	end
 
-	if !s:surrounded(0)
+	if !s:surrounded_tight(0)
 		return "\<BS>"
 	endif
 	return "\<BS>\<DELETE>"
@@ -104,7 +104,7 @@ function! PearReturn()
 		return "\<CR>"
 	end
 
-	let ent = s:surrounded(1)
+	let ent = s:surrounded_tight(1)
 	if ent is 0
 		return "\<CR>"
 	endif
@@ -306,7 +306,7 @@ function! s:surrounded_loose_ish()
 	return 0
 endfunction
 
-function! s:surrounded(ret_ent)
+function! s:surrounded_tight(ret_ent)
 	let pos = col('.') - 1
 	if pos ==# 0
 		return 0
