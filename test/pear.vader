@@ -238,6 +238,16 @@ Expect:
 
   fin
 
+Given (special case curly braces inside parens):
+  while(")
+  not-indented
+
+Do (brackets inside parens):
+  $ihello {0
+Expect:
+  while("hello {0})
+  not-indented
+
 # -----------------------
 
 Given (quoting):

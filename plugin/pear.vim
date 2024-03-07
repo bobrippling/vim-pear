@@ -202,9 +202,35 @@ function! s:maybe_insert_matching_close(close)
 	" don't do this for pairs which are likely to want to remain on a single line
 	let [_buf, l, col, off, _curswant] = getcurpos()
 	let relevant = getline(l)[:col - 1]
+
+	" if we're after a close paren, it's like that:
+	" if() |
+	"      ^ we're here or there's no close paren
+	"      in which case, don't close-line.
+	"      (except we allow `loop` as a special case)
 	if stridx(relevant, ")") < 0 && relevant !~# '\<loop\>'
 		return 0
 	endif
+
+	" are we inside a pair? e.g. f({}) or "x={0}"
+	let after = getline(l)[col:]
+	let stopline = l+1
+	for open in keys(s:pairs)
+		let close = s:pairs[open]['pair']
+		let [fline, fcol] = searchpairpos(open, "", close, "zn", "", stopline)
+
+		if fline > 0 && fcol > 0
+			" found the pair on this line (z), cursor hasn't moved (n)
+			" could be:
+			" if | ()
+			"    ^ cursor
+			" but we ignore this case and act as if we found:
+			" if ( | )
+			"
+			" so we're in a pair already, don't make a new line:
+			return 0
+		endif
+	endfor
 
 	let curindent = indent(l)
 
