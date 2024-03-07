@@ -248,6 +248,38 @@ Expect:
   while("hello {0})
   not-indented
 
+Given (special case curly braces inside quotes):
+  main(){
+    ) ""
+    hi
+  }
+
+Do (brackets inside quotes):
+  j2f"i{0
+Expect:
+  main(){
+    ) "{0}"
+    hi
+  }
+
+Do (brackets inside quotes, just before):
+  jt"a{
+Expect:
+  main(){
+    ) {""
+    hi
+    }
+  }
+
+Do (brackets inside quotes, just after):
+  jA{
+Expect:
+  main(){
+    ) ""{
+    hi
+    }
+  }
+
 # -----------------------
 
 Given (quoting):

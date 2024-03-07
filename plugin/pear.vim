@@ -284,25 +284,40 @@ function! s:maybe_insert_matching_close(close)
 endfunction
 
 function! s:surrounded_loose_ish()
-	let [_buf, l, col, _off, _curswant] = getcurpos()
-	let after = getline(l)[col:]
-	let stopline = l+1
-	for open in keys(s:pairs)
-		let close = s:pairs[open]['pair']
-		let [fline, fcol] = searchpairpos(open, "", close, "zn", "", stopline)
+	let [_buf, l, col, off, curswant] = getcurpos()
+	let line = getline(l)
 
-		if fline > 0 && fcol > 0
-			" found the pair on this line (z), cursor hasn't moved (n)
-			" could be:
-			" if | ()
-			"    ^ cursor
-			" but we ignore this case (hence _ish) and act as if we found:
-			" if ( | )
-			"
-			" so we're in a pair already, don't make a new line:
-			return 1
-		endif
-	endfor
+	" searchpairpos() - we must move the cursor back before calling this
+	call cursor(l, col - 1)
+	let stopline = l+1
+	try
+		for open in keys(s:pairs)
+			let close = s:pairs[open]['pair']
+
+			if open ==# close
+				" searchpair doesn't work here
+				if stridx(line, open) < col - 1 && stridx(line, open, col-1) >= 0
+					" we're between
+					return 1
+				endif
+			else
+				let [fline, fcol] = searchpairpos(open, "", close, "zn", "", stopline)
+				if fline > 0 && fcol > 0
+					" found the pair on this line (z), cursor hasn't moved (n)
+					" could be:
+					" if | ()
+					"    ^ cursor
+					" but we ignore this case (hence _ish) and act as if we found:
+					" if ( | )
+					"
+					" so we're in a pair already, don't make a new line:
+					return 1
+				endif
+			endif
+		endfor
+	finally
+		call cursor([l, col, off, curswant])
+	endtry
 	return 0
 endfunction
 
