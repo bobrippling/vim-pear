@@ -385,7 +385,7 @@ function! s:imap_pair(key, buffer)
 endfunction
 
 function! s:imap(key, func, buffer)
-	" | is special key which separate map command from text
+	" | is special key which separates map command from text
 	let key = a:key
 	if key ==# '|'
 		let key = '<BAR>'
