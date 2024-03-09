@@ -58,14 +58,16 @@ function! PearInsert(key)
 		return a:key
 	end
 
-	let pos = col('.') - 1
-	let line = getline('.')
-	let before = strpart(line, 0, pos)
+	if empty(getcmdtype())
+		let pos = col('.') - 1
+		let line = getline('.')
+		let before = strpart(line, 0, pos)
 
-	" Ignore auto close if prev character is \
-	if before[-1:-1] ==# '\'
-		return a:key
-	end
+		" Ignore auto close if prev character is \
+		if before[-1:-1] ==# '\'
+			return a:key
+		end
+	endif
 
 	let ent = s:getpair(a:key)
 	if type(ent) != v:t_number
@@ -81,9 +83,14 @@ function! PearStepover(key)
 		return a:key
 	end
 
-	let pos = col('.') - 1
-	let line = getline('.')
-	let after = strpart(line, pos, s:ulen(a:key))
+	if empty(getcmdtype())
+		let pos = col('.') - 1
+		let line = getline('.')
+		let after = strpart(line, pos, s:ulen(a:key))
+	else
+		let pos = getcmdpos()
+		let after = getcmdline()[pos - 1]
+	endif
 
 	return after ==# a:key ? s:right : a:key
 endfunction
@@ -93,7 +100,7 @@ function! PearDelete()
 		return "\<BS>"
 	end
 
-	if !s:surrounded_tight(0)
+	if empty(getcmdtype()) && !s:surrounded_tight(0)
 		return "\<BS>"
 	endif
 	return "\<BS>\<DELETE>"
@@ -139,15 +146,21 @@ endfunction
 " -----------------------------------------
 
 function! s:skip()
-	return mode() ==# 'R' || (exists('b:pear_enabled') && !b:pear_enabled)
+	return mode() ==# 'R' || (empty(getcmdtype()) && (exists('b:pear_enabled') && !b:pear_enabled))
 endfunction
 
 function! s:insert_open_or_stepover(key, ent)
 	let ent = a:ent
 
-	let pos = col('.') - 1
-	let line = getline('.')
-	let before = strpart(line, 0, pos)
+	if empty(getcmdtype())
+		let pos = col('.') - 1
+		let line = getline('.')
+		let before = strpart(line, 0, pos)
+	else
+		let pos = getcmdpos() - 1
+		let line = getcmdline()
+		let before = line[:pos]
+	endif
 
 	" if the open and close are the same, check stepover before
 	" trying to insert the close (or not and keeping the open quote)
@@ -366,6 +379,8 @@ function! s:init()
 
 	execute 'inoremap <silent> <BS> <C-R>=PearDelete()<CR>'
 	execute 'inoremap <silent> <C-h> <C-R>=PearDelete()<CR>'
+	execute 'cnoremap <silent> <BS> <C-R>=PearDelete()<CR>'
+	execute 'cnoremap <silent> <C-h> <C-R>=PearDelete()<CR>'
 
 	execute 'inoremap <silent> <CR> <C-R>=PearReturn()<CR>'
 
@@ -396,6 +411,9 @@ function! s:imap(key, func, buffer)
 
 	" use expr will cause search() to not work
 	execute 'inoremap <silent> ' . args . key . " <C-R>=" . a:func . "('" . escaped_key . "')<CR>"
+	if !a:buffer
+		execute 'cnoremap <silent> ' . args . key . " <C-R>=" . a:func . "('" . escaped_key . "')<CR>"
+	endif
 
 	if a:buffer
 		call add(b:pear_maps, escaped_key)
