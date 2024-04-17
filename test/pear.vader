@@ -105,6 +105,14 @@ Expect:
   needs_surrounding)
   I'm
 
+Given (don't parenthesize):
+  "a string"
+
+Do:
+  I(
+Expect:
+  ("a string"
+
 Given (don't parenthesize/quote non-alpha):
   (a, tuple)
 
@@ -250,15 +258,15 @@ Expect:
 
 Given (special case curly braces inside quotes):
   main(){
-    ) ""
+    ) " "
     hi
   }
 
 Do (brackets inside quotes):
-  j2f"i{0
+  jf"a{0
 Expect:
   main(){
-    ) "{0}"
+    ) "{0} "
     hi
   }
 
@@ -266,7 +274,7 @@ Do (brackets inside quotes, just before):
   jt"a{
 Expect:
   main(){
-    ) {""
+    ) {" "
     hi
     }
   }
@@ -275,7 +283,7 @@ Do (brackets inside quotes, just after):
   jA{
 Expect:
   main(){
-    ) ""{
+    ) " "{
     hi
     }
   }

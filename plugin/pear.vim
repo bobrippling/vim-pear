@@ -3,7 +3,7 @@
 " Version: 1.0.0
 " License: MIT
 
-let s:after_paren = '^([^a-zA-Z0-9$_({[]|$)'
+let s:after_paren = '^([^a-zA-Z0-9$_({"' . "'" . '[]|$)'
 let s:non_quotable = '^($|\s|[])}])' " allow quotes before specific chars
 let s:not_inside_quotes = '^[^"`' . "'" . ']*$'
 
