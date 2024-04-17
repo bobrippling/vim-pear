@@ -5,6 +5,7 @@
 
 let s:after_paren = '^([^a-zA-Z0-9$_({[]|$)'
 let s:non_quotable = '^($|\s|[])}])' " allow quotes before specific chars
+let s:not_inside_quotes = '^[^"`' . "'" . ']*$'
 
 let s:less_than_checked = {
 \  'pair': '>',
@@ -13,7 +14,7 @@ let s:less_than_checked = {
 \ }
 
 let s:pairs = {
-\  '(': { 'pair': ')', 'after': s:after_paren },
+\  '(': { 'pair': ')', 'after': s:after_paren, 'before': s:not_inside_quotes },
 \  '[': { 'pair': ']', 'after': s:after_paren },
 \  '{': { 'pair': '}', 'after': s:after_paren, 'close-line': 1 },
 \  '<': s:less_than_checked,
