@@ -161,40 +161,45 @@ function! s:insert_open_or_stepover(key, ent)
 		endif
 	endif
 
+	let insert_close_pair = 1
+
 	let re_before = get(ent, 'before', '')
 	if !empty(re_before) && match(before, '\v' . re_before) ==# -1
 		"echom "didn't match /" . re_before . "/ against '" . before . "'"
-		return a:key
+		let insert_close_pair = 0
 	endif
 
 	let re_before_not = get(ent, 'before-not', '')
-	if !empty(re_before_not) && match(before, '\v' . re_before_not) !=# -1
+	if insert_close_pair && !empty(re_before_not) && match(before, '\v' . re_before_not) !=# -1
 		"echom "matched /" . re_before_not . "/ against '" . before . "'"
-		return a:key
+		let insert_close_pair = 0
 	endif
 
 	let re_after = get(ent, 'after', '')
-	if !empty(re_after)
+	if insert_close_pair && !empty(re_after)
 		let after = strpart(line, pos)
 		if match(after, '\v' . re_after) ==# -1
 			"echom "didn't match /" . re_after . "/ against '" . after . "'"
-			return a:key
+			let insert_close_pair = 0
 		endif
 	endif
 
-	if get(ent, 'only-if-even', 0)
+	if insert_close_pair && get(ent, 'only-if-even', 0)
 		" don't insert a corresponding close if there's an odd number before
 		let n = count(before, a:key)
 		if n % 2 != 0
 			"echom "odd number (" . n . ") of '" . a:key
-			return a:key
+			let insert_close_pair = 0
 		endif
 	endif
 
 	if get(ent, 'close-line', 0) && s:maybe_insert_matching_close(close)
-		return a:key
+		let insert_close_pair = 0
 	endif
 
+	if !insert_close_pair
+		return a:key
+	endif
 	return a:key . close . s:repeated(s:left, close)
 endfunction
 
