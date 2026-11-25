@@ -89,7 +89,7 @@ function! PearStepover(key)
 	return after ==# a:key ? s:right : a:key
 endfunction
 
-function! PearDelete()
+function! PearDelete(_abi)
 	if s:skip() || pumvisible()
 		return "\<BS>"
 	end
@@ -100,7 +100,7 @@ function! PearDelete()
 	return "\<BS>\<DELETE>"
 endfunction
 
-function! PearReturn()
+function! PearReturn(_abi)
 	if s:skip()
 		return "\<CR>"
 	end
@@ -370,10 +370,9 @@ function! s:init()
 		call s:imap_pair(key, 0)
 	endfor
 
-	execute 'inoremap <silent> <BS> <C-R>=PearDelete()<CR>'
-	execute 'inoremap <silent> <C-h> <C-R>=PearDelete()<CR>'
-
-	execute 'inoremap <silent> <CR> <C-R>=PearReturn()<CR>'
+	call s:imap('<BS>', 'PearDelete', 0)
+	call s:imap('<C-h>', 'PearDelete', 0)
+	call s:imap('<CR>', 'PearReturn', 0)
 
 	let fts = keys(s:pairs_per_ft)
 	execute "autocmd FileType " . join(fts, ",") . " call PearInitFt()"
@@ -400,8 +399,7 @@ function! s:imap(key, func, buffer)
 
 	let args = a:buffer ? '<buffer> ' : ''
 
-	" use expr will cause search() to not work
-	execute 'inoremap <silent> ' . args . key . " <C-R>=" . a:func . "('" . escaped_key . "')<CR>"
+	execute 'inoremap <silent> <expr> ' . args . key . " " . a:func . "('" . escaped_key . "')"
 
 	if a:buffer
 		call add(b:pear_maps, escaped_key)
