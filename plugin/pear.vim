@@ -370,26 +370,28 @@ function! s:init()
 		call s:imap_pair(key, 0)
 	endfor
 
-	call s:imap('<BS>', 'PearDelete', 0)
-	call s:imap('<C-h>', 'PearDelete', 0)
-	call s:imap('<CR>', 'PearReturn', 0)
+	" these don't touch the buffer or call search(), so <expr> is safe
+	let use_expr = 1
+	call s:imap('<BS>', 'PearDelete', 0, use_expr)
+	call s:imap('<C-h>', 'PearDelete', 0, use_expr)
+	call s:imap('<CR>', 'PearReturn', 0, use_expr)
 
 	let fts = keys(s:pairs_per_ft)
 	execute "autocmd FileType " . join(fts, ",") . " call PearInitFt()"
 endfunction
 
 function! s:imap_pair(key, buffer)
-	call s:imap(a:key, 'PearInsert', a:buffer)
+	call s:imap(a:key, 'PearInsert', a:buffer, 0)
 
 	let ent = s:getpair(a:key)
 	let close = ent.pair
 
 	if a:key !=# close
-		call s:imap(close, 'PearStepover', a:buffer)
+		call s:imap(close, 'PearStepover', a:buffer, 0)
 	endif
 endfunction
 
-function! s:imap(key, func, buffer)
+function! s:imap(key, func, buffer, use_expr)
 	" | is special key which separates map command from text
 	let key = a:key
 	if key ==# '|'
@@ -399,7 +401,12 @@ function! s:imap(key, func, buffer)
 
 	let args = a:buffer ? '<buffer> ' : ''
 
-	execute 'inoremap <silent> <expr> ' . args . key . " " . a:func . "('" . escaped_key . "')"
+	if a:use_expr
+		execute 'inoremap <silent> <expr> ' . args . key . " " . a:func . "('" . escaped_key . "')"
+	else
+		" <expr> mappings can't move the cursor (search()) or modify the buffer, hence:
+		execute 'inoremap <silent> ' . args . key . " <C-R>=" . a:func . "('" . escaped_key . "')<CR>"
+	endif
 
 	if a:buffer
 		call add(b:pear_maps, escaped_key)
